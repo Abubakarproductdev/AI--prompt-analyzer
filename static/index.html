@@ -103,6 +103,21 @@
                 <button onclick="seedDatabase()" class="bg-slate-800 hover:bg-slate-700 text-xs px-3 py-1 rounded border border-slate-600 transition">Regenerate Demo Data</button>
             </div>
 
+            <!-- Custom Monitored Keywords Card -->
+            <div class="bg-card p-6 rounded-xl border border-slate-700 shadow-lg mb-6">
+                <h3 class="text-lg font-semibold mb-4 text-slate-300">Custom Monitored Keywords (Anchor-Value Proximity)</h3>
+                <div class="flex space-x-4 mb-4">
+                    <input type="text" id="new-keyword" class="flex-1 bg-darker border border-slate-600 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-brand" placeholder="e.g. secret, api, password">
+                    <button onclick="addKeyword()" class="bg-brand hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition">Add Keyword</button>
+                </div>
+                <div class="overflow-y-auto max-h-48 border border-slate-700 rounded-lg bg-darker">
+                    <table class="w-full text-left text-sm">
+                        <tbody id="keyword-table-body" class="divide-y divide-slate-700/50">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div class="bg-card p-5 rounded-xl border border-slate-700">
                     <div class="text-slate-400 text-sm font-semibold">Total Scans Inspected</div>
@@ -311,6 +326,7 @@
 
                 renderChart(data.category_counts);
                 renderTable(data.recent_logs);
+                fetchKeywords();
             } catch (err) {
                 console.error(err);
             }
