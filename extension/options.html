@@ -1,41 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AI Guard Settings</title>
+    <meta charset="UTF-8">
+    <title>AI Shield - Engine Policies</title>
     <style>
-        body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 40px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        h1 { color: #3b82f6; display: flex; align-items: center; gap: 12px; }
-        .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #334155; }
-        th { color: #94a3b8; font-weight: 600; }
-        .code { font-family: monospace; background: #0f172a; padding: 4px 8px; border-radius: 4px; color: #e2e8f0; font-size: 13px; }
-        .btn { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .btn:hover { background: #2563eb; }
-        .btn-danger { background: #ef4444; }
-        .btn-danger:hover { background: #dc2626; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #cbd5e1; }
-        input, select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; }
-        .flex { display: flex; gap: 16px; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: #000; color: #fff; margin: 0; padding: 40px; }
+        .container { max-width: 950px; margin: 0 auto; }
+        h1 { display: flex; align-items: center; gap: 12px; font-weight: 700; margin-bottom: 8px; }
+        h1 svg { width: 32px; height: 32px; stroke: #fff; }
+        p.subtitle { color: #888; margin-bottom: 40px; font-size: 15px; }
+        
+        .card { background: #0a0a0a; border: 1px solid #222; border-radius: 16px; padding: 32px; margin-bottom: 24px; transition: border-color 0.3s; }
+        .card:hover { border-color: #333; }
+        h2 { margin-top: 0; font-size: 18px; font-weight: 600; margin-bottom: 24px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 16px; table-layout: fixed; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #222; vertical-align: middle; }
+        th { color: #888; font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { font-size: 13px; }
+        
+        th:nth-child(1) { width: 11%; }
+        th:nth-child(2) { width: 16%; }
+        th:nth-child(3) { width: 16%; }
+        th:nth-child(4) { width: 33%; }
+        th:nth-child(5) { width: 8%; }
+        th:nth-child(6) { width: 16%; }
+        
+        .code { font-family: 'JetBrains Mono', monospace; background: #000; padding: 6px 8px; border-radius: 6px; color: #ccc; font-size: 11px; border: 1px solid #222; display: block; word-break: break-all; white-space: pre-wrap; }
+        
+        .btn { background: #fff; color: #000; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px; transition: all 0.2s; white-space: nowrap; }
+        .btn:hover { background: #ccc; transform: translateY(-1px); }
+        .btn-outline { background: transparent; color: #fff; border: 1px solid #333; }
+        .btn-outline:hover { border-color: #fff; background: transparent; }
+        .btn-danger { background: transparent; color: #ff4444; border: 1px solid #441111; }
+        .btn-danger:hover { background: #ff4444; color: #fff; border-color: #ff4444; }
+        
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; color: #aaa; font-size: 13px; }
+        input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #000; color: white; box-sizing: border-box; font-family: inherit; transition: border-color 0.2s; }
+        input:focus, select:focus { outline: none; border-color: #fff; }
+        
+        .flex { display: flex; gap: 20px; }
         .flex > * { flex: 1; }
-        .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-        .badge-active { background: #10b98120; color: #10b981; border: 1px solid #10b981; }
-        .badge-inactive { background: #64748b20; color: #94a3b8; border: 1px solid #64748b; }
+        
+        .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-active { border: 1px solid #fff; color: #fff; }
+        .badge-inactive { border: 1px solid #333; color: #666; }
+        .badge-active::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px #fff; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🛡️ AI Guard Dynamic Rules Engine</h1>
-        <p style="color:#94a3b8; margin-bottom: 30px;">Manage detection rules instantly. Changes take effect on your next prompt scan without requiring a restart.</p>
+        <h1>
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+            Engine Policies
+        </h1>
+        <p class="subtitle">Configure local detection rules. Changes apply instantly.</p>
         
         <div class="card">
-            <h2>Add New Custom Rule</h2>
+            <h2>Compile Custom Rule</h2>
             <form id="add-rule-form">
                 <div class="flex">
                     <div class="form-group">
-                        <label>Category</label>
+                        <label>Threat Category</label>
                         <select id="rule-category" required>
                             <option value="PII & Internal Data">PII & Internal Data</option>
                             <option value="Credentials & Secrets">Credentials & Secrets</option>
@@ -43,7 +70,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Rule Name</label>
+                        <label>Signature Name</label>
                         <input type="text" id="rule-name" placeholder="e.g. Project Apollo Keyword" required>
                     </div>
                     <div class="form-group">
@@ -55,18 +82,18 @@
                     <label>Regex Pattern / Keyword</label>
                     <input type="text" id="rule-pattern" placeholder="e.g. (?i)\bProject Apollo\b" required>
                 </div>
-                <button type="submit" class="btn">Add Rule</button>
+                <button type="submit" class="btn">Deploy Rule</button>
             </form>
         </div>
 
         <div class="card">
-            <h2>Active Security Rules</h2>
+            <h2>Active Policy Signatures</h2>
             <table>
                 <thead>
                     <tr>
                         <th>Status</th>
                         <th>Category</th>
-                        <th>Name</th>
+                        <th>Signature Name</th>
                         <th>Pattern</th>
                         <th>Weight</th>
                         <th>Actions</th>

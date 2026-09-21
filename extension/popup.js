@@ -16,11 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateUI(isActive) {
         if (isActive) {
-            label.textContent = 'Protection Active';
-            label.style.color = '#10b981';
+            label.textContent = 'Active Engine';
+            label.style.color = '#fff';
         } else {
-            label.textContent = 'Protection Paused';
-            label.style.color = '#ef4444';
+            label.textContent = 'Engine Paused';
+            label.style.color = '#666';
         }
     }
 

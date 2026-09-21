@@ -11,13 +11,16 @@
             theme: {
                 extend: {
                     colors: {
-                        dark: '#0f172a',
-                        darker: '#020617',
-                        card: '#1e293b',
-                        brand: '#3b82f6',
-                        success: '#10b981',
-                        warning: '#f59e0b',
-                        danger: '#ef4444'
+                        dark: '#000000',
+                        darker: '#050505',
+                        card: '#0a0a0a',
+                        brand: '#ffffff',
+                        success: '#ffffff',
+                        warning: '#cccccc',
+                        danger: '#666666'
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     }
                 }
             }
@@ -25,10 +28,17 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; }
-        .tab-active { border-bottom: 2px solid #3b82f6; color: #3b82f6; }
-        .tab-inactive { color: #94a3b8; }
-        .tab-inactive:hover { color: #f8fafc; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background-color: #000; color: #fff; letter-spacing: -0.01em; }
+        .tab-active { border-bottom: 2px solid #fff; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .tab-inactive { color: #666; }
+        .tab-inactive:hover { color: #ccc; }
+        
+        * { transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.3s ease; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -62,7 +72,7 @@
                 </div>
                 
                 <div class="mt-auto">
-                    <button onclick="scanPrompt()" id="scan-btn" class="w-full bg-brand hover:bg-blue-600 text-white font-bold py-3 rounded-lg transition shadow-lg shadow-brand/30">Scan & Guard</button>
+                    <button onclick="scanPrompt()" id="scan-btn" class="w-full bg-brand hover:bg-gray-300 text-black font-bold py-3 rounded-lg transition shadow-lg shadow-white/10 hover:shadow-white/20 hover:-translate-y-1">Scan & Guard</button>
                 </div>
             </div>
 
@@ -107,8 +117,8 @@
             <div class="bg-card p-6 rounded-xl border border-slate-700 shadow-lg mb-6">
                 <h3 class="text-lg font-semibold mb-4 text-slate-300">Custom Monitored Keywords (Anchor-Value Proximity)</h3>
                 <div class="flex space-x-4 mb-4">
-                    <input type="text" id="new-keyword" class="flex-1 bg-darker border border-slate-600 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-brand" placeholder="e.g. secret, api, password">
-                    <button onclick="addKeyword()" class="bg-brand hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition">Add Keyword</button>
+                    <input type="text" id="new-keyword" class="flex-1 bg-darker border border-slate-600 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-brand transition" placeholder="e.g. secret, api, password">
+                    <button onclick="addKeyword()" class="bg-brand hover:bg-gray-300 text-black font-bold py-2 px-4 rounded transition hover:-translate-y-0.5">Add Keyword</button>
                 </div>
                 <div class="overflow-y-auto max-h-48 border border-slate-700 rounded-lg bg-darker">
                     <table class="w-full text-left text-sm">
@@ -347,7 +357,7 @@
                     labels: labels.length ? labels : ['No Data'],
                     datasets: [{
                         data: values.length ? values : [1],
-                        backgroundColor: ['#ef4444', '#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#334155'],
+                        backgroundColor: ['#ffffff', '#cccccc', '#999999', '#666666', '#333333', '#111111'],
                         borderWidth: 0,
                         hoverOffset: 4
                     }]
@@ -401,3 +411,55 @@
     </script>
 </body>
 </html>
+<script>
+        async function fetchKeywords() {
+            try {
+                const res = await fetch('/api/keywords');
+                const data = await res.json();
+                const tbody = document.getElementById('keyword-table-body');
+                if(!tbody) return;
+                tbody.innerHTML = '';
+                if(data.length === 0) {
+                    tbody.innerHTML = '<tr><td class="p-3 text-slate-500 italic">No custom keywords configured.</td></tr>';
+                }
+                data.forEach(kw => {
+                    tbody.innerHTML += \
+                        <tr class="hover:bg-slate-800/50 transition">
+                            <td class="p-3 font-semibold">\</td>
+                            <td class="p-3 text-right">
+                                <button onclick="deleteKeyword(\)" class="text-danger hover:text-red-400 text-xs bg-red-900/20 px-2 py-1 rounded">Remove</button>
+                            </td>
+                        </tr>
+                    \;
+                });
+            } catch (err) {
+                console.error('Failed to fetch keywords', err);
+            }
+        }
+
+        async function addKeyword() {
+            const input = document.getElementById('new-keyword');
+            const keyword = input.value.trim();
+            if(!keyword) return;
+            try {
+                await fetch('/api/keywords', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({keyword})
+                });
+                input.value = '';
+                fetchKeywords();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function deleteKeyword(id) {
+            try {
+                await fetch(\/api/keywords/\\, {method: 'DELETE'});
+                fetchKeywords();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+</script>

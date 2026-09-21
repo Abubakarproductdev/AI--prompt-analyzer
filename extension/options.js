@@ -49,14 +49,14 @@ async function loadRules() {
                 <td><span class="code">${rule.pattern}</span></td>
                 <td>${rule.weight}</td>
                 <td style="display:flex; gap:8px;">
-                    <button class="btn" style="background:#475569;" onclick="toggleRule(${rule.id}, ${!rule.is_active})">${rule.is_active ? 'Disable' : 'Enable'}</button>
-                    <button class="btn btn-danger" onclick="deleteRule(${rule.id})">Delete</button>
+                    <button class="btn btn-outline" onclick="toggleRule(${rule.id}, ${!rule.is_active})">${rule.is_active ? 'Disable' : 'Enable'}</button>
+                    <button class="btn btn-danger" onclick="deleteRule(${rule.id})">Drop</button>
                 </td>
             `;
             tbody.appendChild(tr);
         });
     } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#ef4444;">Failed to load rules. Is backend running?</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#ff4444;">Failed to connect to backend engine.</td></tr>`;
     }
 }
 
