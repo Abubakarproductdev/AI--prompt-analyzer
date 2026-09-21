@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Guard</title>
+    <style>
+        body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; width: 280px; margin: 0; padding: 20px; background: #0f172a; color: #f8fafc; }
+        h2 { font-size: 18px; margin: 0 0 15px 0; display: flex; align-items: center; gap: 8px; color: #3b82f6;}
+        
+        .toggle-container { display: flex; align-items: center; justify-content: space-between; background: #1e293b; padding: 12px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 15px;}
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #475569; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #10b981; }
+        input:checked + .slider:before { transform: translateX(20px); }
+        
+        .status-text { font-size: 14px; font-weight: 600; }
+        .footer { font-size: 12px; color: #64748b; text-align: center; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <h2>
+        <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        Enterprise AI Guard
+    </h2>
+    
+    <div class="toggle-container">
+        <span class="status-text" id="status-label">Protection Active</span>
+        <label class="switch">
+            <input type="checkbox" id="guard-toggle" checked>
+            <span class="slider"></span>
+        </label>
+    </div>
+    
+    <div style="background: #020617; padding: 10px; border-radius: 6px; font-size: 12px; font-family: monospace; border: 1px solid #1e293b; text-align: center; margin-bottom: 15px;">
+        Backend: <strong>http://127.0.0.1:8000</strong>
+    </div>
+    
+    <button id="manage-rules-btn" style="width: 100%; padding: 10px; background: #334155; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+        ⚙️ Manage Dynamic Rules
+    </button>
+    
+    <div class="footer">Protects ChatGPT, Claude, and Gemini in real-time.</div>
+    <script src="popup.js"></script>
+</body>
+</html>

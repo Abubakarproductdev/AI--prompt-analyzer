@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Guard Settings</title>
+    <style>
+        body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 40px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { color: #3b82f6; display: flex; align-items: center; gap: 12px; }
+        .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #334155; }
+        th { color: #94a3b8; font-weight: 600; }
+        .code { font-family: monospace; background: #0f172a; padding: 4px 8px; border-radius: 4px; color: #e2e8f0; font-size: 13px; }
+        .btn { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn:hover { background: #2563eb; }
+        .btn-danger { background: #ef4444; }
+        .btn-danger:hover { background: #dc2626; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #cbd5e1; }
+        input, select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; }
+        .flex { display: flex; gap: 16px; }
+        .flex > * { flex: 1; }
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .badge-active { background: #10b98120; color: #10b981; border: 1px solid #10b981; }
+        .badge-inactive { background: #64748b20; color: #94a3b8; border: 1px solid #64748b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ AI Guard Dynamic Rules Engine</h1>
+        <p style="color:#94a3b8; margin-bottom: 30px;">Manage detection rules instantly. Changes take effect on your next prompt scan without requiring a restart.</p>
+        
+        <div class="card">
+            <h2>Add New Custom Rule</h2>
+            <form id="add-rule-form">
+                <div class="flex">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="rule-category" required>
+                            <option value="PII & Internal Data">PII & Internal Data</option>
+                            <option value="Credentials & Secrets">Credentials & Secrets</option>
+                            <option value="Prompt Injection">Prompt Injection</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Rule Name</label>
+                        <input type="text" id="rule-name" placeholder="e.g. Project Apollo Keyword" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Threat Weight (0-100)</label>
+                        <input type="number" id="rule-weight" min="1" max="100" value="25" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Regex Pattern / Keyword</label>
+                    <input type="text" id="rule-pattern" placeholder="e.g. (?i)\bProject Apollo\b" required>
+                </div>
+                <button type="submit" class="btn">Add Rule</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Active Security Rules</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Category</th>
+                        <th>Name</th>
+                        <th>Pattern</th>
+                        <th>Weight</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="rules-tbody">
+                    <!-- Loaded dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="options.js"></script>
+</body>
+</html>
