@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Enterprise AI Guard - Project Report</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 40px auto; padding: 20px; }
+        h1 { color: #000; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        h2 { color: #222; margin-top: 30px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        h3 { color: #444; margin-top: 20px; }
+        ul { margin-bottom: 20px; }
+        li { margin-bottom: 8px; }
+        strong { color: #000; }
+        hr { border: none; border-top: 1px solid #eee; margin: 30px 0; }
+    </style>
+</head>
+<body>
+    <h1>Enterprise AI Guard: Complete Project Report</h1>
+
+    <h2>1. Executive Summary</h2>
+    <p>The <strong>Enterprise AI Guard</strong> is a comprehensive, zero-trust Data Leak Prevention (DLP) platform designed to protect corporate assets from being accidentally or maliciously leaked to public Generative AI platforms like ChatGPT, Claude, and Gemini.</p>
+    <p>Rather than relying on network-level proxies which break end-to-end encryption, this project utilizes a client-side Chrome Extension paired with a centralized FastAPI backend to analyze, sanitize, and block sensitive prompts in real-time, right inside the employee's browser.</p>
+
+    <h2>2. Technical Stack</h2>
+    <ul>
+        <li><strong>Backend:</strong> Python 3.10+, FastAPI, Uvicorn</li>
+        <li><strong>Database:</strong> Embedded SQLite (<code>safety_audit.db</code>) for serverless, zero-config data persistence.</li>
+        <li><strong>Detection Engine:</strong> Native Python Regex, Microsoft Presidio Analyzer (spaCy NLP).</li>
+        <li><strong>Browser Extension:</strong> Chrome Manifest V3, Vanilla JavaScript, CSS.</li>
+        <li><strong>Web Dashboard:</strong> HTML5, Tailwind CSS (via CDN), Chart.js for analytics.</li>
+    </ul>
+
+    <h2>3. Architectural Components</h2>
+
+    <h3>A. The Browser Extension (The Client Shield)</h3>
+    <p>The extension acts as the primary enforcement layer on the employee's machine.</p>
+    <ul>
+        <li><strong>Real-Time Interception:</strong> A debounced content script (<code>content.js</code>) listens to keystrokes inside AI chat windows.</li>
+        <li><strong>Safe React Intercepts:</strong> Instead of hijacking standard submit buttons, the extension gracefully intercepts the <code>Enter</code> key. If a prompt is clean, it steps aside and allows the native React events to handle the submission.</li>
+        <li><strong>CSP Bypass:</strong> To bypass strict Content Security Policies on platforms like ChatGPT, the extension uses a Service Worker (<code>background.js</code>) to securely route <code>fetch</code> requests to the local backend.</li>
+        <li><strong>Local UI:</strong> Features a sleek, Vercel-inspired dark mode Popup and Options page where users can manage local settings.</li>
+    </ul>
+
+    <h3>B. The Detection Engine (The Brain)</h3>
+    <p>The Python-based <code>SafetyScanner</code> evaluates text through three distinct security phases:</p>
+    <ol>
+        <li><strong>Custom Proximity Matching:</strong> Uses Anchor-Value logic. It searches for custom keywords defined by the CISO (e.g., "password", "api") and checks if they sit within 20 characters of a high-entropy string.</li>
+        <li><strong>Static Signature Rules:</strong> Uses strict mathematical RegEx patterns to instantly identify standard secrets (AWS Keys, RSA Private Keys, Credit Cards).</li>
+        <li><strong>Semantic NLP (Microsoft Presidio):</strong> Uses Artificial Intelligence to read the context of the sentence, identifying Personally Identifiable Information (PII) such as Names, Locations, and Organizations.</li>
+    </ol>
+
+    <h3>C. The Central Backend & Database (The Command Center)</h3>
+    <p>The FastAPI backend serves as the central hub for the enterprise.</p>
+    <ul>
+        <li><strong>Stateless API:</strong> Exposes endpoints for prompt scanning, rule management, and keyword management.</li>
+        <li><strong>Immutable Auditing:</strong> Every scan is logged to the SQLite database, recording the original text, the sanitized text, the risk score, and the specific violations triggered.</li>
+    </ul>
+
+    <h3>D. The CISO Dashboard (The UI)</h3>
+    <p>A centralized web dashboard designed for security administrators.</p>
+    <ul>
+        <li><strong>Analytics:</strong> Visualizes risk category distributions using Chart.js doughnut charts and displays top-level metrics.</li>
+        <li><strong>Live Audit Trail:</strong> A real-time table displaying every prompt intercepted across the enterprise.</li>
+        <li><strong>Global Policy Management:</strong> Allows administrators to dynamically add new Custom Monitored Keywords or Regex rules, which instantly sync down to all employee extensions.</li>
+    </ul>
+
+    <h2>4. Risk Scoring & Remediation</h2>
+    <p>Every violation detected by the engine is assigned a <strong>Threat Weight</strong>. The engine aggregates these weights to calculate a final Risk Score:</p>
+    <ul>
+        <li><strong>ALLOW (Score 0-24):</strong> The prompt is safe. The extension forwards it to the AI natively.</li>
+        <li><strong>WARN (Score 25-39):</strong> Minor PII detected. The extension halts the prompt and shows a floating warning UI, allowing the user to override.</li>
+        <li><strong>BLOCK (Score 40+):</strong> Critical data detected (e.g., API Keys, Passwords). The extension entirely blocks the transmission.</li>
+    </ul>
+
+    <h2>5. Security & Privacy</h2>
+    <ul>
+        <li><strong>Zero External Dependencies:</strong> Because the platform relies entirely on an embedded SQLite database and a local Python server, no corporate data is ever transmitted to a third-party cloud provider for analysis.</li>
+        <li><strong>Sanitization:</strong> When a prompt is flagged, the backend automatically generates a sanitized version of the text (masking the sensitive data with <code>&lt;REDACTED&gt;</code>).</li>
+    </ul>
+</body>
+</html>
