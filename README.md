@@ -1,4 +1,4 @@
-# 🛡️ Enterprise AI Guard
+# Enterprise AI Guard
 
 **A Zero-Trust Data Leak Prevention (DLP) Platform for Corporate AI Usage**
 
@@ -8,7 +8,7 @@ Rather than relying on network-level proxies which break end-to-end encryption, 
 
 ---
 
-## ✨ Key Features
+## Key Features
 - **Real-Time DOM Interception:** Safely intercepts React submit events on modern AI chat apps without breaking the UI.
 - **Three-Tier Detection Engine:** Combines NLP, Regex, and Proximity matching to catch semantic PII, strict credentials, and conversational secrets.
 - **Zero-Trust Architecture:** Runs entirely locally via an embedded SQLite DB and Python backend; no corporate data is ever sent to third-party cloud analyzers.
@@ -17,7 +17,7 @@ Rather than relying on network-level proxies which break end-to-end encryption, 
 
 ---
 
-## 🏗️ Architecture & Data Flow
+## Architecture & Data Flow
 
 The platform is split into the Client Shield (Chrome Extension) and the Command Center (FastAPI Backend).
 
@@ -48,21 +48,21 @@ sequenceDiagram
     
     API-->>Extension: Returns decision (ALLOW, WARN, or BLOCK)
     
-    alt If Score is ALLOW (0-24)
-        Extension->>User: Steps aside; allows native ChatGPT submission.
-    else If Score is WARN or BLOCK (25-100)
-        Extension->>User: Halts the send event, shows Security UI Modal.
+    alt Score is ALLOW (0-24)
+        Extension->>User: Steps aside and allows native ChatGPT submission
+    else Score is WARN or BLOCK (25-100)
+        Extension->>User: Halts the send event and shows Security UI Modal
     end
 ```
 
-### 🧠 The 3 Phases of Detection
+### The 3 Phases of Detection
 1. **Custom Proximity Engine:** Uses Anchor-Value logic. If a CISO defines anchor words like `api` or `password`, the engine searches for those words within 20 characters of a high-entropy string (catching conversational leaks like *"my api key is sk-12345"*).
 2. **Static Signature Rules:** Uses strict mathematical RegEx patterns to instantly identify standard secrets (AWS Keys, RSA Private Keys, Credit Cards) regardless of the surrounding text.
 3. **Semantic NLP:** Uses Artificial Intelligence (**Microsoft Presidio / spaCy**) to actually *read* the context of the sentence, dynamically identifying Personally Identifiable Information (PII) such as Names, Locations, and Organizations.
 
 ---
 
-## 💻 Tech Stack
+## Tech Stack
 * **Backend:** Python 3.10+, FastAPI, Uvicorn
 * **Database:** SQLite3 (Embedded, serverless)
 * **Security & NLP:** Microsoft Presidio Analyzer, spaCy (`en_core_web_sm`), Python `re`
@@ -71,7 +71,7 @@ sequenceDiagram
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Run the Backend
 ```bash
@@ -104,7 +104,7 @@ uvicorn main:app --reload --host 127.0.0.1 --port 8000
 
 ---
 
-## 🧪 How to Test
+## How to Test
 1. Open [ChatGPT](https://chatgpt.com/).
 2. Type a safe query: `Draft an executive summary of our Q3 marketing deliverables.` (Notice it passes seamlessly).
 3. Type a PII leak: `My name is John Smith and my email is alice@corp.com.` (Notice the WARN block).
