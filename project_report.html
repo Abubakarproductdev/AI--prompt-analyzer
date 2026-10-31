@@ -44,7 +44,7 @@
     <h3>B. The Detection Engine (The Brain)</h3>
     <p>The Python-based <code>SafetyScanner</code> evaluates text through three distinct security phases:</p>
     <ol>
-        <li><strong>Custom Proximity Matching:</strong> Uses Anchor-Value logic. It searches for custom keywords defined by the CISO (e.g., "password", "api") and checks if they sit within 20 characters of a high-entropy string.</li>
+        <li><strong>Custom Proximity Matching:</strong> Uses Anchor-Value logic. It searches for custom keywords defined by the CISO (e.g., "password", "api", and other sensitive terms like this") and checks if they sit within 20 characters of a high-entropy string.</li>
         <li><strong>Static Signature Rules:</strong> Uses strict mathematical RegEx patterns to instantly identify standard secrets (AWS Keys, RSA Private Keys, Credit Cards).</li>
         <li><strong>Semantic NLP (Microsoft Presidio):</strong> Uses Artificial Intelligence to read the context of the sentence, identifying Personally Identifiable Information (PII) such as Names, Locations, and Organizations.</li>
     </ol>
