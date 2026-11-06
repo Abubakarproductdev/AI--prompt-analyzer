@@ -60,7 +60,7 @@ html_content = """
 
 <h2>5. Security & Privacy</h2>
 <ul>
-    <li><b>Zero External Dependencies:</b> Because the platform relies entirely on an embedded SQLite database and a local Python server, no corporate data is ever transmitted to a third-party cloud provider for analysis.</li>
+    <li><b>Zero External Dependencies:</b> no corporate data is ever transmitted to a third-party cloud provider for analysis.</li>
     <li><b>Sanitization:</b> When a prompt is flagged, the backend automatically generates a sanitized version of the text (masking the sensitive data).</li>
 </ul>
 """
